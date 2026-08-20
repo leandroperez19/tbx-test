@@ -1,0 +1,16 @@
+/* Barra superior de la aplicación, según el wireframe del enunciado. */
+.app-navbar {
+  background-color: #ff6b6b;
+}
+
+.app-navbar .navbar-brand {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* La columna hex usa fuente monoespaciada para que los valores queden
+   alineados y sean más fáciles de comparar visualmente. */
+.hex-cell {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+}

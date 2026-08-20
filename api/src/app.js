@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const cors = require('./middlewares/cors')
 const filesRoutes = require('./routes/files.routes')
 const notFoundHandler = require('./middlewares/notFoundHandler')
 const errorHandler = require('./middlewares/errorHandler')
@@ -14,6 +15,7 @@ const errorHandler = require('./middlewares/errorHandler')
 function createApp () {
   const app = express()
 
+  app.use(cors)
   app.use(express.json())
 
   app.use('/files', filesRoutes)
