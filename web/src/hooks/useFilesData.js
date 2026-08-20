@@ -1,44 +1,43 @@
 'use strict'
 
-import { useEffect, useState } from 'react'
-import { getFilesData } from '../services/filesService'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  fetchFilesData,
+  fetchFilesList,
+  selectFilesState,
+  selectSelectedFile
+} from '../store/filesSlice'
 
 /**
- * Hook que obtiene los datos de los archivos desde la API.
+ * Conecta la vista con el estado de archivos del store.
  *
- * Expone una máquina de estados simple —loading, success o error— en lugar de
- * varios booleanos independientes, de modo que no puedan existir combinaciones
- * contradictorias como "cargando y con error a la vez".
+ * Encapsular `useSelector` y `useDispatch` acá mantiene a los componentes
+ * ajenos a Redux: reciben datos y no conocen la librería de estado, de modo
+ * que cambiarla no obligaría a tocar la capa de presentación.
  *
- * @param {{ fileName?: string }} [options] Filtra por un archivo puntual.
- * @returns {{ status: 'loading'|'success'|'error', files: object[], error: object|null }}
+ * @returns {{ status: string, data: object[], error: object|null }}
  */
-function useFilesData ({ fileName } = {}) {
-  const [state, setState] = useState({ status: 'loading', files: [], error: null })
+function useFilesData () {
+  const dispatch = useDispatch()
+  const selectedFile = useSelector(selectSelectedFile)
+  const { status, data, error } = useSelector(selectFilesState)
 
+  // El listado de archivos del filtro se pide una sola vez.
   useEffect(() => {
-    // Evita actualizar el estado si el componente se desmontó antes de que la
-    // request terminara, o si llegó una petición más nueva.
-    let active = true
+    dispatch(fetchFilesList())
+  }, [dispatch])
 
-    setState({ status: 'loading', files: [], error: null })
+  // Los datos se vuelven a pedir cada vez que cambia el archivo seleccionado.
+  useEffect(() => {
+    const promise = dispatch(fetchFilesData(selectedFile || undefined))
 
-    getFilesData({ fileName }).then(result => {
-      if (!active) return
+    // Si el usuario cambia de archivo antes de que termine la request previa,
+    // se aborta para que una respuesta vieja no pise a la nueva.
+    return () => promise.abort()
+  }, [dispatch, selectedFile])
 
-      if (result.status === 'success') {
-        setState({ status: 'success', files: result.data, error: null })
-      } else {
-        setState({ status: 'error', files: [], error: result.error })
-      }
-    })
-
-    return () => {
-      active = false
-    }
-  }, [fileName])
-
-  return state
+  return { status, data, error }
 }
 
 export default useFilesData
