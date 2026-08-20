@@ -105,13 +105,19 @@ puedan importar la app y ejercitarla con supertest sin abrir un puerto real.
 ### Validación de líneas
 
 El enunciado indica descartar las líneas que "no tengan la cantidad de datos
-suficientes". La validación implementada es algo más estricta: además de exigir
-las 4 columnas, verifica que ninguna venga vacía, que `number` sea un número
-finito y que `hex` tenga 32 dígitos hexadecimales.
+suficientes". La validación implementada es más estricta: además de exigir las
+4 columnas, verifica que ninguna venga vacía, que `number` sea un número finito
+y que `hex` tenga 32 dígitos hexadecimales.
 
-El motivo es que una línea con `number` no numérico produciría `NaN` en la
-respuesta JSON, que es una salida inválida. Validar de más produce una
-respuesta correcta; validar de menos produce una respuesta rota.
+La decisión se validó contra los datos reales del API externo. El archivo
+`test6.csv` contiene filas con las 4 columnas presentes pero con la columna
+`number` corrupta (`076124434o`, `39o`, `o`). Validando únicamente la cantidad
+de columnas, esas filas se habrían incluido en la respuesta con `number: NaN`,
+que `JSON.stringify` serializa como `null`. El resultado habría sido un endpoint
+devolviendo datos inválidos como si fueran correctos.
+
+Validar de más produce una respuesta correcta; validar de menos produce una
+respuesta rota.
 
 ### Manejo de fallos por archivo
 
@@ -123,6 +129,16 @@ respuesta correcta; validar de menos produce una respuesta rota.
 - Si en cambio se pidió un archivo puntual con `?fileName=`, un fallo de descarga
   **sí se propaga** como `502`. Devolver un array vacío ocultaría el problema
   justo cuando el consumidor pidió ese archivo y ningún otro.
+
+### Comportamiento observado con los datos reales
+
+Al momento de escribir esto, el API externo expone 9 archivos:
+
+| Archivo | Resultado |
+|---------|-----------|
+| `test2.csv`, `test3.csv`, `test9.csv` | Procesados: 15 líneas válidas en total. |
+| `test1.csv`, `test6.csv`, `test15.csv`, `test18.csv` | Descargados sin líneas válidas; se devuelven con `lines: []`. |
+| `test4.csv`, `test5.csv` | El API externo responde `500`; se omiten de la respuesta. |
 
 ### Resolución del 404
 
