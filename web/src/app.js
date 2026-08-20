@@ -3,6 +3,7 @@
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import useFilesData from './hooks/useFilesData'
+import FileFilter from './components/FileFilter'
 import FilesTable from './components/FilesTable'
 import StatusMessage from './components/StatusMessage'
 
@@ -13,7 +14,7 @@ import StatusMessage from './components/StatusMessage'
  * componentes de presentación.
  */
 function App () {
-  const { status, files, error } = useFilesData()
+  const { status, data, error } = useFilesData()
 
   return (
     <>
@@ -24,8 +25,10 @@ function App () {
       </Navbar>
 
       <Container className='py-4'>
+        <FileFilter />
+
         {status === 'success'
-          ? <FilesTable files={files} />
+          ? <FilesTable files={data} />
           : <StatusMessage status={status} error={error} />}
       </Container>
     </>
