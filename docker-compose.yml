@@ -1,0 +1,18 @@
+services:
+  api:
+    build: ./api
+    container_name: tbx-api
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+    restart: unless-stopped
+
+  web:
+    build: ./web
+    container_name: tbx-web
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+    restart: unless-stopped
