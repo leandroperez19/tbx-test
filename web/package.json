@@ -10,8 +10,8 @@
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
     "test": "jest",
-    "lint": "standard \"src/**/*.js\"",
-    "lint:fix": "standard --fix \"src/**/*.js\""
+    "lint": "standard \"src/**/*.js\" \"test/**/*.js\"",
+    "lint:fix": "standard --fix \"src/**/*.js\" \"test/**/*.js\""
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
