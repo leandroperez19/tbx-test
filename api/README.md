@@ -138,7 +138,8 @@ Al momento de escribir esto, el API externo expone 9 archivos:
 |---------|-----------|
 | `test2.csv`, `test3.csv`, `test9.csv` | Procesados: 15 líneas válidas en total. |
 | `test1.csv`, `test6.csv`, `test15.csv`, `test18.csv` | Descargados sin líneas válidas; se devuelven con `lines: []`. |
-| `test4.csv`, `test5.csv` | El API externo responde `500`; se omiten de la respuesta. |
+| `test4.csv` | El API externo responde `500`; se omite de la respuesta. |
+| `test5.csv` | El API externo responde `404` pese a figurar en `/secret/files`; se omite igual. |
 
 ### Resolución del 404
 

@@ -20,7 +20,7 @@ function App () {
     <>
       <Navbar className='app-navbar' expand='lg'>
         <Container fluid>
-          <Navbar.Brand>React Test App</Navbar.Brand>
+          <Navbar.Brand>React Test Apps</Navbar.Brand>
         </Container>
       </Navbar>
 

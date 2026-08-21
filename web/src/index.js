@@ -3,8 +3,8 @@
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import store from './store'
-import App from './App'
-import ErrorBoundary from './components/errorBoundary'
+import App from './app'
+import ErrorBoundary from './components/ErrorBoundary'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles.css'

@@ -1,8 +1,8 @@
 # TBX Challenge — Full Stack
 
 Solución al code challenge de Toolbox: una API REST que consume archivos CSV
-desde un API externo, los valida y reformatea, y un cliente web que muestra
-esa información en pantalla.
+desde un API externo, los valida y reformatea, y un cliente web que muestra esa
+información en pantalla.
 
 ## Estructura
 
@@ -38,10 +38,26 @@ curl -X GET "http://localhost:3000/files/data" -H "accept: application/json"
 
 ## Arranque sin Docker
 
+En dos terminales separadas:
+
+```bash
+cd api && npm install && npm start     # requiere Node 14
+cd web && npm install && npm start     # requiere Node 16
+```
+
 Las instrucciones detalladas de cada aplicación están en su propio README:
 
 - [`api/README.md`](./api/README.md) — endpoints, contratos, decisiones de diseño
-- [`web/README.md`](./web/README.md) — build, estructura de componentes
+- [`web/README.md`](./web/README.md) — estructura, estado, decisiones de diseño
+
+## Tests
+
+```bash
+cd api && npm test     # 47 tests (Mocha + Chai)
+cd web && npm test     # 19 tests (Jest + Testing Library)
+```
+
+Ambos proyectos verifican además el estilo con StandardJS mediante `npm run lint`.
 
 ## Requisitos cubiertos
 
@@ -49,11 +65,13 @@ Las instrucciones detalladas de cada aplicación están en su propio README:
 |-----------|--------|
 | API REST con Node.js 14 + Express | ✅ |
 | Endpoint `GET /files/data` | ✅ |
-| JavaScript ES6+ sin TypeScript ni transpiladores | ✅ |
+| JavaScript ES6+ sin TypeScript ni transpiladores en la API | ✅ |
 | Sin dependencias globales ni variables de entorno obligatorias | ✅ |
 | Tests con Mocha + Chai (`npm test`) | ✅ |
-| Frontend React + React Bootstrap con Webpack | ⏳ |
-| Programación funcional y Hooks | ⏳ |
+| API iniciable con `npm start` | ✅ |
+| Frontend React + React Bootstrap con Webpack | ✅ |
+| Programación funcional y Hook Effects | ✅ |
+| Pantalla acorde al wireframe | ✅ |
 
 ### Puntos opcionales
 
@@ -62,7 +80,13 @@ Las instrucciones detalladas de cada aplicación están en su propio README:
 | `GET /files/list` | ✅ |
 | Filtro `GET /files/data?fileName=` | ✅ |
 | StandardJS | ✅ |
+| Redux en el frontend | ✅ |
+| Tests unitarios con Jest en el frontend | ✅ |
+| Filtro por `fileName` desde la interfaz | ✅ |
 | Docker / Docker Compose | ✅ |
-| Redux en el frontend | ⏳ |
-| Tests unitarios con Jest en el frontend | ⏳ |
-| Filtro por `fileName` desde la UI | ⏳ |
+
+## Notas sobre el API externo
+
+El servicio externo expone nueve archivos, varios de ellos deliberadamente
+corruptos o inaccesibles. El detalle de cada caso y de cómo se resuelve está
+documentado en [`api/README.md`](./api/README.md).
